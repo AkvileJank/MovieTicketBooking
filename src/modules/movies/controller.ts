@@ -2,6 +2,7 @@ import { Router } from 'express'
 import type { Database } from '@/database'
 import { jsonRoute } from '@/utils/middleware'
 import buildRespository from './repository'
+import { NoIdProvided } from './errors'
 
 export default (db: Database) => {
   const messages = buildRespository(db)
@@ -9,11 +10,11 @@ export default (db: Database) => {
 
   router.get(
     '/',
-    jsonRoute(async () => {
-      // a hard-coded solution for your first controller test
-      const ids = [133093, 816692] // TODO: get ids from query params
+    jsonRoute(async (req) => {
+      const idString = req.query.id
+      if (!idString || typeof idString !== 'string') throw new NoIdProvided()
+      const ids: number[] = idString.split(',').map((id) => Number(id))
       const movies = await messages.findByIds(ids)
-
       return movies
     })
   )
