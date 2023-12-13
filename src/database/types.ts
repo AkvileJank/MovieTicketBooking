@@ -1,35 +1,59 @@
+import type { ColumnType } from "kysely";
+
+export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S, I | undefined, U>
+  : ColumnType<T, T | undefined, T>;
+
+export interface Bookings {
+  id: Generated<number>;
+  movieId: number;
+  screeningId: number;
+  seat: number | null;
+  createdAt: string | null;
+}
+
 export interface Directors {
-  movieId: number
-  personId: number
+  movieId: number;
+  personId: number;
 }
 
 export interface Movies {
-  id: number | null
-  title: string
-  year: number | null
+  id: Generated<number>;
+  title: string;
+  year: number | null;
 }
 
 export interface People {
-  id: number | null
-  name: string
-  birth: number | null
+  id: Generated<number>;
+  name: string;
+  birth: number | null;
 }
 
 export interface Ratings {
-  movieId: number
-  rating: number
-  votes: number
+  movieId: number;
+  rating: number;
+  votes: number;
+}
+
+export interface Screenings {
+  id: Generated<number>;
+  totalTickets: number | null;
+  ticketsLeft: number | null;
+  movieId: number;
+  timestamp: string | null;
 }
 
 export interface Stars {
-  movieId: number
-  personId: number
+  movieId: number;
+  personId: number;
 }
 
 export interface DB {
-  directors: Directors
-  movies: Movies
-  people: People
-  ratings: Ratings
-  stars: Stars
+  bookings: Bookings;
+  directors: Directors;
+  movies: Movies;
+  people: People;
+  ratings: Ratings;
+  screenings: Screenings;
+  stars: Stars;
 }
