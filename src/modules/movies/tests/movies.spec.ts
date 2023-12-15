@@ -1,6 +1,5 @@
 import supertest from 'supertest'
 import createTestDatabase from '@tests/utils/createTestDatabase'
-// import createDatabase from '@/database'
 import createApp from '@/app'
 
 // Testing with a real database, fine for read-only tests, as we would not
@@ -54,3 +53,4 @@ describe('GET', () => {
     ])
   })
 })
+
