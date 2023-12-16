@@ -1,4 +1,4 @@
-import { Kysely, SqliteDatabase } from 'kysely'
+import { Kysely, SqliteDatabase, sql } from 'kysely'
 
 /** Migration used to initialize empty database tables for the test database. */
 export async function up(db: Kysely<SqliteDatabase>) {
@@ -15,16 +15,23 @@ export async function up(db: Kysely<SqliteDatabase>) {
     .execute()
 
   await db.schema
+    .createTable('users')
+    .ifNotExists()
+    .addColumn('id', 'integer', (c) => c.primaryKey().autoIncrement().notNull())
+    .addColumn('username', 'text', (c) => c.notNull())
+    .execute()
+
+  await db.schema
     .createTable('bookings')
     .ifNotExists()
     .addColumn('id', 'integer', (c) => c.primaryKey().autoIncrement().notNull())
-    .addColumn('movie_id', 'integer', (c) =>
-      c.notNull().references('movies.id')
-    )
+    .addColumn('user_id', 'integer', (c) => c.notNull().references('users.id'))
     .addColumn('screening_id', 'integer', (c) =>
       c.notNull().references('screenings.id')
     )
     .addColumn('seat', 'integer')
-    .addColumn('created_at', 'text')
+    .addColumn('created_at', 'datetime', (c) =>
+      c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`)
+    )
     .execute()
 }

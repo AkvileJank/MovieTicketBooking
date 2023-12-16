@@ -6,10 +6,10 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 
 export interface Bookings {
   id: Generated<number>;
-  movieId: number;
+  userId: number;
   screeningId: number;
   seat: number | null;
-  createdAt: string | null;
+  createdAt: Generated<string>;
 }
 
 export interface Directors {
@@ -18,13 +18,13 @@ export interface Directors {
 }
 
 export interface Movies {
-  id: Generated<number>;
+  id: number | null;
   title: string;
   year: number | null;
 }
 
 export interface People {
-  id: Generated<number>;
+  id: number | null;
   name: string;
   birth: number | null;
 }
@@ -48,6 +48,11 @@ export interface Stars {
   personId: number;
 }
 
+export interface Users {
+  id: Generated<number>;
+  username: string;
+}
+
 export interface DB {
   bookings: Bookings;
   directors: Directors;
@@ -56,4 +61,5 @@ export interface DB {
   ratings: Ratings;
   screenings: Screenings;
   stars: Stars;
+  users: Users;
 }
