@@ -1,8 +1,16 @@
 import { z } from 'zod'
-import type { Screenings } from '@/database'
+import type { Screenings, Bookings } from '@/database'
 
 type Record = Screenings
-export type InsertableScreening = Pick<Record, 'movieId' | 'totalTickets' | 'timestamp'>
+export type InsertableScreening = Pick<
+  Record,
+  'movieId' | 'totalTickets' | 'timestamp'
+>
+
+export type InsertableBooking = Pick<
+  Bookings,
+  'screeningId' | 'userId' | 'seat'
+>
 
 const schema = z.object({
   id: z.number().int().positive(),
@@ -12,9 +20,23 @@ const schema = z.object({
   totalTickets: z.coerce.number().int().positive(),
 })
 
+const bookingSchema = z.object({
+  id: z.number().int().positive(),
+  screeningId: z.coerce.number().int().positive(),
+  userId: z.coerce.number().int().positive(),
+  seat: z.coerce.number().int().positive(),
+  createdAt: z.date(),
+  // todo: check if the date() is ok
+})
+
 const insertable = schema.omit({
   id: true,
   ticketsLeft: true,
+})
+
+export const insertableBooking = bookingSchema.omit({
+  id: true,
+  createdAt: true,
 })
 
 export const parseInsertable = (record: unknown) => insertable.parse(record)

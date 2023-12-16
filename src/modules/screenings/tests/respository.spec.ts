@@ -1,6 +1,6 @@
 import createTestDatabase from '@tests/utils/createTestDatabase'
 import buildRepository from '../repository'
-import screenings from '@/modules/screenings/controller';
+import screenings from '@/modules/screenings/controller'
 
 const db = await createTestDatabase()
 const repository = buildRepository(db)
@@ -78,15 +78,15 @@ describe('addBooking', () => {
     const testBooking = {
       userId: 1,
       screeningId: 1,
-      seat: 1
+      seat: 1,
     }
 
-    const timestamp = new Date().toISOString()
+    const timestamp = new Date().toISOString().replace('T', ' ').slice(0, -5)
     const result = await repository.addBooking(testBooking)
     expect(result).toEqual({
       id: 1,
       ...testBooking,
-      createdAt: timestamp
+      createdAt: timestamp,
     })
   })
 })
